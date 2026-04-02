@@ -1,21 +1,31 @@
-import { FaTshirt, FaHamburger, FaPaintBrush, FaTools } from "react-icons/fa";
+import { FaTshirt, FaHamburger, FaTools, FaPaintBrush } from "react-icons/fa";
+import { MdApps } from "react-icons/md";
+import styles from "./Categorias.module.css";
 
-function Categorias() {
+function Categorias({ onSelect, categoriaActiva }) {
   const categorias = [
-    { nombre: "Artesanías", icon: <FaPaintBrush /> },
     { nombre: "Gastronomía", icon: <FaHamburger /> },
-    { nombre: "Moda", icon: <FaTshirt /> },
-    { nombre: "Servicios", icon: <FaTools /> },
+    { nombre: "Moda",        icon: <FaTshirt />    },
+    { nombre: "Servicios",   icon: <FaTools />     },
   ];
 
   return (
-    <div className="flex justify-center gap-8 py-6 bg-primary">
+    <div className={styles.wrapper}>
+      <div
+        onClick={() => onSelect("")}
+        className={`${styles.chip} ${categoriaActiva === "" ? styles.chipActive : ""}`}
+      >
+        <MdApps className={styles.icon} />
+        Todas
+      </div>
+
       {categorias.map((cat, i) => (
         <div
           key={i}
-          className="flex items-center gap-2 bg-secondary px-5 py-2 rounded-lg hover:bg-accent hover:text-black cursor-pointer transition"
+          onClick={() => onSelect(cat.nombre)}
+          className={`${styles.chip} ${categoriaActiva === cat.nombre ? styles.chipActive : ""}`}
         >
-          {cat.icon}
+          <span className={styles.icon}>{cat.icon}</span>
           {cat.nombre}
         </div>
       ))}

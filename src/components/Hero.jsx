@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
+import styles from "./Hero.module.css";
 
 function Hero({ onSearch }) {
-  const [texto, setTexto] = useState("");
+  const [texto, setTexto]       = useState("");
   const [categoria, setCategoria] = useState("");
 
   const handleClick = () => {
@@ -9,38 +11,40 @@ function Hero({ onSearch }) {
   };
 
   return (
-    <div className="bg-secondary py-24 text-center">
-      <h2 className="text-4xl font-bold mb-10">
-        Buscar emprendimientos...
+    <div className={styles.hero}>
+      <h2 className={styles.title}>
+        Descubre <span className={styles.titleAccent}>emprendimientos</span><br />
+        de tu comunidad
       </h2>
+      <p className={styles.subtitle}>Apoya el talento local de Soledad, Atlántico</p>
 
-      <div className="flex justify-center">
-        <div className="flex items-center bg-white rounded-full overflow-hidden shadow-lg w-[600px]">
-          
-          <select
-            className="px-4 py-3 text-black outline-none bg-transparent"
-            onChange={(e) => setCategoria(e.target.value)}
-          >
-            <option value="">Todas las Categorías</option>
-            <option value="Moda">Moda</option>
-            <option value="Gastronomía">Gastronomía</option>
-            <option value="Servicios">Servicios</option>
-          </select>
+      <div className={styles.searchBar}>
+        <select
+          className={styles.select}
+          onChange={(e) => {
+            setCategoria(e.target.value);
+            onSearch(texto, e.target.value);
+          }}
+        >
+          <option value="">Todas las categorías</option>
+          <option value="Gastronomía">Gastronomía</option>  {/* 👈 coincide con empresa.js */}
+          <option value="Moda">Moda</option>
+          <option value="Servicios">Servicios</option>
+        </select>
 
-          <input
-            type="text"
-            placeholder="Buscar emprendimiento..."
-            className="flex-1 px-4 py-3 text-black outline-none"
-            onChange={(e) => setTexto(e.target.value)}
-          />
+        <input
+          type="text"
+          placeholder="Buscar emprendimiento..."
+          className={styles.input}
+          onChange={(e) => {
+            setTexto(e.target.value);
+            onSearch(e.target.value, categoria);
+          }}
+        />
 
-          <button
-            onClick={handleClick}
-            className="bg-accent px-6 py-3 font-semibold text-black hover:scale-105 transition"
-          >
-            Buscar
-          </button>
-        </div>
+        <button className={styles.btn} onClick={handleClick}>
+          <FaSearch /> Buscar
+        </button>
       </div>
     </div>
   );

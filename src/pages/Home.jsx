@@ -2,17 +2,20 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import EmpresaCard from "../components/EmpresaCard";
-import API from "../services/api";
+import Categorias from "../components/Categorias";
+import { empresasData } from "../data/empresas"; // 👈
+import styles from "./Home.module.css";
 
 function Home() {
-  const [empresas, setEmpresas] = useState([]);
-  const [search, setSearch] = useState("");
+  const [empresas, setEmpresas]   = useState([]);
+  const [search, setSearch]       = useState("");
   const [categoria, setCategoria] = useState("");
 
   useEffect(() => {
-    API.get(`/empresas?search=${search}`)
-      .then(res => setEmpresas(res.data))
-      .catch(err => console.error(err));
+    const filtradas = empresasData.filter(e =>
+      e.nombre.toLowerCase().includes(search.toLowerCase())
+    );
+    setEmpresas(filtradas);
   }, [search]);
 
   const handleSearch = (texto, cat) => {
@@ -20,28 +23,36 @@ function Home() {
     setCategoria(cat);
   };
 
-  // Filtro por categoría en frontend
   const empresasFiltradas = empresas.filter(e =>
     categoria === "" || e.categoria === categoria
   );
 
   return (
-    <>
+    <div className={styles.page}>
       <Navbar />
       <Hero onSearch={handleSearch} />
+      <Categorias onSelect={setCategoria} categoriaActiva={categoria} />
 
-      <div className="px-12 py-12">
-        <h2 className="text-2xl font-bold mb-8">
-          Emprendimientos
-        </h2>
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Emprendimientos</h2>
+          <span className={styles.sectionCount}>{empresasFiltradas.length} resultados</span>
+        </div>
 
-        <div className="grid grid-cols-3 gap-8">
-          {empresasFiltradas.map((e) => (
-            <EmpresaCard key={e.id} empresa={e} />
-          ))}
+        <div className={styles.grid}>
+          {empresasFiltradas.length > 0 ? (
+            empresasFiltradas.map((e) => (
+              <EmpresaCard key={e.id} empresa={e} />
+            ))
+          ) : (
+            <div className={styles.empty}>
+              <span className={styles.emptyIcon}>🔍</span>
+              No se encontraron emprendimientos
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

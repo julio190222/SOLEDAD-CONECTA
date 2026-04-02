@@ -1,20 +1,27 @@
 import { FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import styles from "./Navbar.module.css";
 
 function Navbar() {
+  const navigate = useNavigate();
+
   return (
-    <nav className="flex justify-between items-center px-16 py-4 bg-primary/90 backdrop-blur-md shadow-md">
-      
-      <h1 className="text-2xl font-bold tracking-wide">
-        SOLEDAD <span className="text-accent">CONECTA</span>
+    <nav className={styles.nav}>
+      <h1
+        className={styles.logo}
+        onClick={() => navigate("/")}     // 👈 navega al home
+        style={{ cursor: "pointer" }}
+      >
+        SOLEDAD <span className={styles.logoAccent}>CONECTA</span>
       </h1>
 
-      <ul className="flex gap-10 text-sm font-medium">
-        <li className="border-b-2 border-accent pb-1">Inicio</li>
-        <li className="hover:text-accent cursor-pointer">Categorías</li>
-        <li className="hover:text-accent cursor-pointer">Sobre Nosotros</li>
+      <ul className={styles.menu}>
+        <li className={`${styles.menuItem} ${styles.menuItemActive}`}>Inicio</li>
+        <li className={styles.menuItem}>Categorías</li>
+        <li className={styles.menuItem}>Sobre Nosotros</li>
       </ul>
 
-      <button className="flex items-center gap-2 bg-accent text-black px-5 py-2 rounded-lg font-semibold hover:scale-105 transition">
+      <button className={styles.btn} onClick={() => navigate("/login")}>
         <FaUser /> Ingresar
       </button>
     </nav>
